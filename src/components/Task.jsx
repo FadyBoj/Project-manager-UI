@@ -2,9 +2,8 @@ import React from 'react'
 
 //icons
 import DropDown from './DropDown'
-import { BsThreeDots } from 'react-icons/bs'
+import { BsThreeDots ,BsCalendar2Plus } from 'react-icons/bs'
 import { AiOutlinePlus,AiOutlineClose } from 'react-icons/ai'
-
 const Task = (props) => {
 
     const Section = (props)=>{
@@ -14,6 +13,25 @@ const Task = (props) => {
             </div>
         )
     }
+
+
+    //handle resize
+    const [windowWidth,setWindoWidth] = React.useState(window.innerWidth);
+
+
+    React.useEffect(() =>{
+        const handleResize = ()=>{
+            setWindoWidth(window.innerWidth);
+            console.log(document.body)
+        }
+
+        window.addEventListener('resize',handleResize);
+
+        return ()=>{
+            window.removeEventListener('resize',handleResize);
+        }
+    })
+
 
     //handle mouseDown
 
@@ -85,8 +103,10 @@ const Task = (props) => {
     setCardText(text)
   }
 
+  const [cardElements,setCardElements] = React.useState([]);
+
+
   const saveCard = async(e)=>{
-    setSavedByBtn(true);
 
     if(cardText.length > 0){
 
@@ -99,27 +119,31 @@ const Task = (props) => {
     }
 
     const response = await fetch('http://localhost:8000/add-card',options);
-    const data = await response.json();
 
-    props.cardAdded()
+    
+    setCardElements((prevElements) =>{
+        return [...prevElements,<Section text={cardText}/>]
+    })
     cardInputRef.current.textContent = ''
-    setTimeout(()=>{
-        setSavedByBtn(false);
-
-    },1)
     setCardText('');
+    setTimeout(() => {
+        cardInputRef.current.focus();
+      }, 0);   
     }
 
-  }
+  } 
 
   
-  let cardElements = []
   if(props.cards)
   {
-    cardElements = props.cards.map((card,index) =>{
-        return <Section key={index} id={index} text={card}/>
+  React.useEffect(()=>{
+    setCardElements(()=>{
+        return props.cards.map((card,index) =>{
+            return <Section key={index} id={index} text={card}/>
+        })
     })
-  }
+  },[0])
+}
 
   const addCardBtnRef = React.useRef();
 
@@ -129,6 +153,7 @@ const Task = (props) => {
         && !addCardBtnRef.current.contains(e.target))
         {
             setIsAdding(false);
+            setCardText('')
            
         }
     }
@@ -153,13 +178,13 @@ const Task = (props) => {
 
             </div>
 
-            <div ref={dropBtnRef}
+            <div  ref={dropBtnRef}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onClick={showMenu}
             >
                 
-                <BsThreeDots className='drop-down-btn' size={34}/>
+                <DropDown />
             </div>
             
         </div>
@@ -178,12 +203,6 @@ const Task = (props) => {
             }
         </div>
 
-        { isOpen &&
-
-        <div ref={dropDownRef} className='drop-down-sec'>
-            <div className='drop-title'>Action list</div>
-        </div>
-        }
         
 
         <div className='add-card'>

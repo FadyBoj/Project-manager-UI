@@ -15,6 +15,8 @@ import Button from '@mui/material/Button';
 //animation
 import taskAnimation from '../assets/task-lottie.json';
 
+import Animation from '../components/Animation'
+
 const MainPage = () => {
     const [cardAdded,setCardAdded] = React.useState(false);
     const checkCard = () =>{
@@ -134,6 +136,7 @@ const MainPage = () => {
               </div>:
               taskElements
               }
+
             </div>
             
     </div>

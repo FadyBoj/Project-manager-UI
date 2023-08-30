@@ -1,17 +1,49 @@
-import React from 'react'
+import * as React from 'react';
+import MenuButton from '@mui/joy/MenuButton';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import Dropdown from '@mui/joy/Dropdown';
+import ListDivider from '@mui/joy/ListDivider';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Check from '@mui/icons-material/Check';
+import { BsThreeDots } from 'react-icons/bs'
 
-//Icons
+export default function DropDown() {
 
-const DropDown = () => {
+
 
   return (
-    <div className='drop-down'>
-       
-       
-        
-        
-    </div>
-  )
-}
+    <Dropdown>
+      <MenuButton sx={{border:'unset',outline:'unset',
+      '&:hover':{
+        backgroundColor:'#282f27'
+      }}}
 
-export default DropDown
+        size="sm"><BsThreeDots color='#fff' size={17}/></MenuButton>
+      <Menu size="sm">
+        <MenuItem>
+          <ListItemDecorator /> Single
+        </MenuItem>
+        <MenuItem>
+          <ListItemDecorator />
+          1.15
+        </MenuItem>
+        <MenuItem>
+          <ListItemDecorator />
+          Double
+        </MenuItem>
+        <MenuItem>
+          <ListItemDecorator>
+            <Check />
+          </ListItemDecorator>
+          Custom: 1.2
+        </MenuItem>
+        <ListDivider />
+        <MenuItem>Add space before paragraph</MenuItem>
+        <MenuItem>Add space after paragraph</MenuItem>
+        <ListDivider />
+        <MenuItem>Custom spacing...</MenuItem>
+      </Menu>
+    </Dropdown>
+  );
+}
