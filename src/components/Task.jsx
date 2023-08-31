@@ -15,22 +15,7 @@ const Task = (props) => {
     }
 
 
-    //handle resize
-    const [windowWidth,setWindoWidth] = React.useState(window.innerWidth);
-
-
-    React.useEffect(() =>{
-        const handleResize = ()=>{
-            setWindoWidth(window.innerWidth);
-            console.log(document.body)
-        }
-
-        window.addEventListener('resize',handleResize);
-
-        return ()=>{
-            window.removeEventListener('resize',handleResize);
-        }
-    })
+    
 
 
     //handle mouseDown
@@ -103,6 +88,8 @@ const Task = (props) => {
     setCardText(text)
   }
 
+  
+
   const [cardElements,setCardElements] = React.useState([]);
 
 
@@ -122,7 +109,7 @@ const Task = (props) => {
 
     
     setCardElements((prevElements) =>{
-        return [...prevElements,<Section text={cardText}/>]
+        return [...prevElements,<Section key={(prevElements.length)} text={cardText}/>]
     })
     cardInputRef.current.textContent = ''
     setCardText('');
@@ -133,17 +120,25 @@ const Task = (props) => {
 
   } 
 
+  const [taskDeleted,setTaskDeleted] = React.useState(false);
+
+  const confirmDelete = () =>{
+    setCardElements([]);
+  }
+
   
-  if(props.cards)
-  {
+  
   React.useEffect(()=>{
+    if(props.cards){
+
     setCardElements(()=>{
         return props.cards.map((card,index) =>{
             return <Section key={index} id={index} text={card}/>
         })
     })
-  },[0])
 }
+  },[])
+
 
   const addCardBtnRef = React.useRef();
 
@@ -167,10 +162,10 @@ const Task = (props) => {
   })
 
 
-  // creating card elements
+  
 
   return (
-    <div className='task'>
+    <div style={taskDeleted ? {display:'none'}:{}} className='task'>
         <div className='task-title'>
             <div>{props.title}</div>
             <div>
@@ -184,7 +179,7 @@ const Task = (props) => {
                 onClick={showMenu}
             >
                 
-                <DropDown />
+                <DropDown id={props.id} title={props.title} checkCard={props.checkCard} confirmDelete={confirmDelete}  />
             </div>
             
         </div>

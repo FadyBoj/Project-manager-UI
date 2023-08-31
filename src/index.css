@@ -49,9 +49,9 @@ body{
     align-items: center;
     justify-content: center;
     gap:6px;
-    background-color: #4caded;
+    background-color: #1976d2;
     border: unset;
-    outline: solid 2px #4caded;
+    outline: solid 2px #1976d2;
     color: white;
     padding: 5px 14px 5px 14px;
     border-radius: 7px;
@@ -105,7 +105,7 @@ body{
 
 
 .task{
-    padding: 0 0px 0px 5px;
+    padding: 0 0px 10px 5px;
     display: flex;
     flex-direction: column;
     align-items: center;

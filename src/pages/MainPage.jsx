@@ -11,16 +11,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-
+import DeleteSnackBar from '../components/DeleteSnackBar';
+import {Toaster , toast} from 'sonner'
 //animation
 import taskAnimation from '../assets/task-lottie.json';
 
 import Animation from '../components/Animation'
 
 const MainPage = () => {
-    const [cardAdded,setCardAdded] = React.useState(false);
+    const [cardDeleted,setCardDeleted] = React.useState(false);
+
     const checkCard = () =>{
-      setCardAdded(prevValue => !prevValue)
+      console.log('task deleted')
+      setCardDeleted(prevValue => !prevValue)
     }
     const [open, setOpen] = React.useState(false);
 
@@ -73,30 +76,38 @@ const MainPage = () => {
       //fetching tasks
 
       const [tasks,setTasks] = React.useState([]);
-
+      
       React.useEffect(()=>{
         const getTasks = async() =>{
           const response = await fetch('http://localhost:8000/get-tasks');
           const serverTasks = await response.json();
-          setTasks(serverTasks);
+            setTasks(
+              serverTasks.map((task,index) =>{
+                return <Task 
+                key={index + 1}
+                id={task.ID}
+                title={task.NAME}
+                cards={task.CARDS}
+                checkCard={checkCard}
+                  />
+              })
+            );
+
         } 
         
 
         getTasks();
-      },[taskChanged,cardAdded]);
+      },[taskChanged,cardDeleted]);
+
+
+      React.useEffect(()=>{
+
+      })
 
 
       // creating task elements
 
-      const taskElements = tasks.map((task,index) =>{
-        return <Task 
-        key={index + 1}
-        id={task.ID}
-        title={task.NAME}
-        cards={task.CARDS}
-        cardAdded={checkCard}
-          />
-      })
+      
 
   return (
     <div className='main-page'>
@@ -134,11 +145,12 @@ const MainPage = () => {
               <div className='empty-div'> 
               <Lottie on className='animated-task' animationData={taskAnimation}/>
               </div>:
-              taskElements
+              tasks
               }
 
             </div>
-            
+
+            <Toaster toastOptions={{ style: { width: '105%' }}} expand  position="top-center" theme="light" />            
     </div>
   )
 }
