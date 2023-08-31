@@ -89,10 +89,8 @@ export default function CustomizedMenus(props) {
       const response = await request.json();
 
       props.confirmDelete();
-      setTimeout(()=>{
-        props.checkCard()
+      props.checkCard()
 
-      },1)
       console.log(response)
       toast.message(`Task with the name "${title}" has been deleted`, {
         description: date.toString().split('GM')[0],

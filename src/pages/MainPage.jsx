@@ -97,12 +97,23 @@ const MainPage = () => {
         
 
         getTasks();
-      },[taskChanged,cardDeleted]);
+      },[taskChanged]);
 
 
       React.useEffect(()=>{
+        const checkTasks = async() =>{
+          const response = await fetch('http://localhost:8000/get-tasks');
+          const serverTasks = await response.json();
+          if(serverTasks.length === 0)
+          {
+            setTasks([])
+          }
 
-      })
+        } 
+
+        checkTasks()
+        
+      },[cardDeleted])
 
 
       // creating task elements

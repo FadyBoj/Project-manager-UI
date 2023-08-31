@@ -123,7 +123,7 @@ const Task = (props) => {
   const [taskDeleted,setTaskDeleted] = React.useState(false);
 
   const confirmDelete = () =>{
-    setCardElements([]);
+    setTaskDeleted(true)
   }
 
   
