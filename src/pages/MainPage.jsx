@@ -79,6 +79,7 @@ const MainPage = () => {
       
       React.useEffect(()=>{
         const getTasks = async() =>{
+          console.log('re rendered')
           const response = await fetch('http://localhost:8000/get-tasks');
           const serverTasks = await response.json();
             setTasks(
