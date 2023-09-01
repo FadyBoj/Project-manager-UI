@@ -16,7 +16,6 @@ import {Toaster , toast} from 'sonner'
 //animation
 import taskAnimation from '../assets/task-lottie.json';
 
-import Animation from '../components/Animation'
 
 const MainPage = () => {
 
