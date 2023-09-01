@@ -43,12 +43,10 @@ const MainPage = () => {
       
     const deleteTask = (id)=>{
       console.log(`${id} wants to be deleted`)
-
-      setTasks((prevTasks) =>{
-        return prevTasks.map((task) =>{
-          return task.props.id === id ? null : task
-        }).filter((item) => item != null)
-      })
+    
+        setTasks((prevTasks)  =>{
+         return  prevTasks.filter((task) => task.props.id !== id)
+        })
       
     }
 
@@ -98,6 +96,7 @@ const MainPage = () => {
 
       
       React.useEffect(()=>{
+        console.log("Fetching data")
         const getTasks = async() =>{
           console.log('re rendered')
           const response = await fetch('http://localhost:8000/get-tasks');
@@ -120,7 +119,7 @@ const MainPage = () => {
       },[0]);
 
       
-      
+        
 
   return (
     <div className='main-page'>
