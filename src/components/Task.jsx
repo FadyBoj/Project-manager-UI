@@ -122,9 +122,6 @@ const Task = (props) => {
 
   const [taskDeleted,setTaskDeleted] = React.useState(false);
 
-  const confirmDelete = () =>{
-    setTaskDeleted(true)
-  }
 
   
   
@@ -179,7 +176,7 @@ const Task = (props) => {
                 onClick={showMenu}
             >
                 
-                <DropDown id={props.id} title={props.title} checkCard={props.checkCard} confirmDelete={confirmDelete}  />
+                <DropDown deleteTask={props.deleteTask} id={props.id} title={props.title}   />
             </div>
             
         </div>

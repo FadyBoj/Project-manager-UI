@@ -19,12 +19,8 @@ import taskAnimation from '../assets/task-lottie.json';
 import Animation from '../components/Animation'
 
 const MainPage = () => {
-    const [cardDeleted,setCardDeleted] = React.useState(false);
 
-    const checkCard = () =>{
-      console.log('task deleted')
-      setCardDeleted(prevValue => !prevValue)
-    }
+    
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -43,7 +39,21 @@ const MainPage = () => {
       };
 
       const [nameError,setError] = React.useState('');
+      const [tasks,setTasks] = React.useState([]);
+
       
+    const deleteTask = (id)=>{
+      console.log(`${id} wants to be deleted`)
+
+      setTasks((prevTasks) =>{
+        return prevTasks.map((task) =>{
+          return task.props.id === id ? null : task
+        }).filter((item) => item != null)
+      })
+      
+    }
+
+
       const handleSubmit = async()=>{
         if(name.length === 0)
         {
@@ -65,7 +75,19 @@ const MainPage = () => {
         try {
           const response = await fetch('http://localhost:8000',options);
           const data = await response.json();
-          setTaskChanged(prevValue => prevValue + 1);
+
+          setTasks((prevTasks) =>{
+            return [...prevTasks
+              ,<Task
+              key={prevTasks.length + 1}
+              id={data.id}
+              title={name}
+              cards={[]}
+              deleteTask={deleteTask}
+              />
+            ]
+          })
+
           setOpen(false)
         } catch (error) {
           console.log(error);
@@ -75,13 +97,13 @@ const MainPage = () => {
 
       //fetching tasks
 
-      const [tasks,setTasks] = React.useState([]);
       
       React.useEffect(()=>{
         const getTasks = async() =>{
           console.log('re rendered')
           const response = await fetch('http://localhost:8000/get-tasks');
           const serverTasks = await response.json();
+          console.log(serverTasks)
             setTasks(
               serverTasks.map((task,index) =>{
                 return <Task 
@@ -89,36 +111,16 @@ const MainPage = () => {
                 id={task.ID}
                 title={task.NAME}
                 cards={task.CARDS}
-                checkCard={checkCard}
+                deleteTask={deleteTask}
                   />
               })
             );
 
-        } 
-        
-
+        }   
         getTasks();
-      },[taskChanged]);
+      },[0]);
 
-
-      React.useEffect(()=>{
-        const checkTasks = async() =>{
-          const response = await fetch('http://localhost:8000/get-tasks');
-          const serverTasks = await response.json();
-          if(serverTasks.length === 0)
-          {
-            setTasks([])
-          }
-
-        } 
-
-        checkTasks()
-        
-      },[cardDeleted])
-
-
-      // creating task elements
-
+      
       
 
   return (

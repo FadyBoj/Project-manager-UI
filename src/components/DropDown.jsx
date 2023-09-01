@@ -88,10 +88,8 @@ export default function CustomizedMenus(props) {
       const request = await fetch('http://localhost:8000/delete-task',options);
       const response = await request.json();
 
-      props.confirmDelete();
-      props.checkCard()
+      props.deleteTask(props.id)
 
-      console.log(response)
       toast.message(`Task with the name "${title}" has been deleted`, {
         description: date.toString().split('GM')[0],
       })
