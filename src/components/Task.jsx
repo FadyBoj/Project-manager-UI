@@ -90,7 +90,6 @@ const Task = (props) => {
 
   
 
-  const [cardElements,setCardElements] = React.useState([]);
 
 
   const saveCard = async(e)=>{
@@ -106,16 +105,14 @@ const Task = (props) => {
     }
 
     const response = await fetch('http://localhost:8000/add-card',options);
+    props.addCard(props.id,cardText);
 
-    
-    setCardElements((prevElements) =>{
-        return [...prevElements,<Section key={(prevElements.length)} text={cardText}/>]
-    })
     cardInputRef.current.textContent = ''
     setCardText('');
     setTimeout(() => {
         cardInputRef.current.focus();
       }, 0);   
+
     }
 
   } 
@@ -124,17 +121,14 @@ const Task = (props) => {
 
 
   
-  
-  React.useEffect(()=>{
-    if(props.cards){
+  let cardElements = []
 
-    setCardElements(()=>{
-        return props.cards.map((card,index) =>{
-            return <Section key={index} id={index} text={card}/>
-        })
+  if(props.cards)
+  {
+    cardElements =  props.cards.map((card,index) =>{
+        return <Section key={index} id={index} text={card}/>
     })
-}
-  },[])
+  }
 
 
   const addCardBtnRef = React.useRef();

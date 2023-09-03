@@ -72,7 +72,7 @@ export default function CustomizedMenus(props) {
 
   // Delete function
 
-  const deleteTask = async() =>{
+  const deleteTask = () =>{
     const id = props.id;
     const title = props.title;
     const date = new Date()
@@ -85,14 +85,15 @@ export default function CustomizedMenus(props) {
       body:JSON.stringify({id:id,title:title})
     }
     try {
-      const request = await fetch('http://localhost:8000/delete-task',options);
-      const response = await request.json();
-
       props.deleteTask(props.id)
+      const request =  fetch('http://localhost:8000/delete-task',options)
+      .then((data)=>{
+        toast.message(`Task with the name "${title}" has been deleted`, {
+          description: date.toString().split('GM')[0],
+        })
+      });
 
-      toast.message(`Task with the name "${title}" has been deleted`, {
-        description: date.toString().split('GM')[0],
-      })
+      
 
     } catch (error) {
       console.log(error)

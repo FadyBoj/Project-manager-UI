@@ -31,7 +31,6 @@ const MainPage = () => {
       };
 
       const [name,setName] = React.useState('');
-      const [taskChanged,setTaskChanged] = React.useState(0);
 
       const handleNameChange = (e)=>{
         setName(e.target.value)
@@ -47,6 +46,21 @@ const MainPage = () => {
         setTasks((prevTasks)  =>{
          return  prevTasks.filter((task) => task.props.id !== id)
         })
+      
+    }
+
+
+    const addCard = (id,cardValue)=>{
+
+      setTasks((prevTasks) =>{
+        return prevTasks.map((task) =>{
+          return task.props.id !== id ? task :
+          
+          {...task,props:{...task.props,cards:[...task.props.cards,cardValue]}}
+
+        })
+      })
+
       
     }
 
@@ -72,7 +86,7 @@ const MainPage = () => {
         try {
           const response = await fetch('http://localhost:8000',options);
           const data = await response.json();
-
+          setName('')
           setTasks((prevTasks) =>{
             return [...prevTasks
               ,<Task
@@ -81,6 +95,7 @@ const MainPage = () => {
               title={name}
               cards={[]}
               deleteTask={deleteTask}
+              addCard={addCard}
               />
             ]
           })
@@ -96,12 +111,9 @@ const MainPage = () => {
 
       
       React.useEffect(()=>{
-        console.log("Fetching data")
         const getTasks = async() =>{
-          console.log('re rendered')
           const response = await fetch('http://localhost:8000/get-tasks');
           const serverTasks = await response.json();
-          console.log(serverTasks)
             setTasks(
               serverTasks.map((task,index) =>{
                 return <Task 
@@ -110,6 +122,7 @@ const MainPage = () => {
                 title={task.NAME}
                 cards={task.CARDS}
                 deleteTask={deleteTask}
+                addCard={addCard}
                   />
               })
             );
@@ -119,7 +132,6 @@ const MainPage = () => {
       },[0]);
 
       
-        
 
   return (
     <div className='main-page'>
