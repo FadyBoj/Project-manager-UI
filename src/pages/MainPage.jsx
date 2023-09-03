@@ -19,7 +19,8 @@ import taskAnimation from '../assets/task-lottie.json';
 
 const MainPage = () => {
 
-    
+
+    const [taskChanged,setTaskChanged] = React.useState(0);  
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -40,12 +41,29 @@ const MainPage = () => {
       const [tasks,setTasks] = React.useState([]);
 
       
-    const deleteTask = (id)=>{
-      console.log(`${id} wants to be deleted`)
-    
-        setTasks((prevTasks)  =>{
-         return  prevTasks.filter((task) => task.props.id !== id)
-        })
+    const deleteTask = async(id,title)=>{
+      const date = new Date()
+      const options = {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({id:id,title:title})
+      }
+      try {
+        const request = await fetch('http://localhost:8000/delete-task',options)
+        
+          toast.message(`Task with the name "${title}" has been deleted`, {
+            description: date.toString().split('GM')[0],
+          });
+
+          setTaskChanged((prevValue) => prevValue + 1)
+  
+      }
+      catch(error)
+      {
+        console.log(error)
+      }
       
     }
 
@@ -56,7 +74,7 @@ const MainPage = () => {
         return prevTasks.map((task) =>{
           return task.props.id !== id ? task :
           
-          {...task,props:{...task.props,cards:[...task.props.cards,cardValue]}}
+          {...task,props:{...task.props,cards:task.props.cards ? [...task.props.cards,cardValue]:[cardValue]}}
 
         })
       })
@@ -87,18 +105,7 @@ const MainPage = () => {
           const response = await fetch('http://localhost:8000',options);
           const data = await response.json();
           setName('')
-          setTasks((prevTasks) =>{
-            return [...prevTasks
-              ,<Task
-              key={prevTasks.length + 1}
-              id={data.id}
-              title={name}
-              cards={[]}
-              deleteTask={deleteTask}
-              addCard={addCard}
-              />
-            ]
-          })
+          setTaskChanged((prevValue) => prevValue + 1)
 
           setOpen(false)
         } catch (error) {
@@ -129,7 +136,7 @@ const MainPage = () => {
 
         }   
         getTasks();
-      },[0]);
+      },[taskChanged]);
 
       
 

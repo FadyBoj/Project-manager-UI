@@ -75,29 +75,9 @@ export default function CustomizedMenus(props) {
   const deleteTask = () =>{
     const id = props.id;
     const title = props.title;
-    const date = new Date()
     
-    const options = {
-      method:'PUT',
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({id:id,title:title})
-    }
-    try {
-      props.deleteTask(props.id)
-      const request =  fetch('http://localhost:8000/delete-task',options)
-      .then((data)=>{
-        toast.message(`Task with the name "${title}" has been deleted`, {
-          description: date.toString().split('GM')[0],
-        })
-      });
+    props.deleteTask(id,title)
 
-      
-
-    } catch (error) {
-      console.log(error)
-    }
 
     setAnchorEl(null);
   }
