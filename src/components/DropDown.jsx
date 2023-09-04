@@ -18,6 +18,7 @@ import { BsThreeDots } from 'react-icons/bs'
 
 const StyledMenu = styled((props) => (
   <Menu
+  
     elevation={0}
     anchorOrigin={{
       vertical: 'bottom',
@@ -32,10 +33,11 @@ const StyledMenu = styled((props) => (
 ))(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: 6,
+    backgroundColor:'#282e33',
     marginTop: theme.spacing(1),
     minWidth: 180,
     color:
-      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+      theme.palette.mode === 'dark' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
     boxShadow:
       'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
     '& .MuiMenu-list': {
@@ -103,25 +105,25 @@ export default function CustomizedMenus(props) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
-          <EditIcon />
+        <MenuItem    onClick={handleClose} disableRipple>
+          <EditIcon style={{ fill: '#ffff' }} />
           Edit
         </MenuItem>
         <MenuItem onClick={deleteTask} disableRipple>
-          <DeleteIcon />
+          <DeleteIcon style={{ fill: '#ffff' }} />
           Delete
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
-          <FileCopyIcon />
+          <FileCopyIcon style={{ fill: '#ffff' }} />
           Duplicate
         </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
+        <Divider  sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
-          <ArchiveIcon />
+          <ArchiveIcon style={{ fill: '#ffff' }} />
           Archive
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
-          <MoreHorizIcon />
+          <MoreHorizIcon style={{ fill: '#ffff' }} />
           More
         </MenuItem>
       </StyledMenu> 

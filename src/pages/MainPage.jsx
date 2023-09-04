@@ -15,8 +15,6 @@ import DeleteSnackBar from '../components/DeleteSnackBar';
 import {Toaster , toast} from 'sonner'
 //animation
 import taskAnimation from '../assets/task-lottie.json';
-
-
 const MainPage = () => {
 
 
@@ -69,12 +67,12 @@ const MainPage = () => {
 
 
     const addCard = (id,cardValue)=>{
-
+      const newCard = {value:cardValue,completed:false}
       setTasks((prevTasks) =>{
         return prevTasks.map((task) =>{
           return task.props.id !== id ? task :
           
-          {...task,props:{...task.props,cards:task.props.cards ? [...task.props.cards,cardValue]:[cardValue]}}
+          {...task,props:{...task.props,cards:task.props.cards ? [...task.props.cards,newCard]:[newCard]}}
 
         })
       })
@@ -138,7 +136,6 @@ const MainPage = () => {
         getTasks();
       },[taskChanged]);
 
-      
 
   return (
     <div className='main-page'>
@@ -180,7 +177,6 @@ const MainPage = () => {
               }
 
             </div>
-
             <Toaster toastOptions={{ style: { width: '105%' }}} expand  position="top-center" theme="light" />            
     </div>
   )

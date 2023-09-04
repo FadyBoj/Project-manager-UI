@@ -1,21 +1,45 @@
 import React from 'react'
+import Lottie from 'lottie-react';
+import EditModal from './Edit-Modal';
+
 
 //icons
-import DropDown from './DropDown'
-import { BsThreeDots ,BsCalendar2Plus } from 'react-icons/bs'
-import { AiOutlinePlus,AiOutlineClose } from 'react-icons/ai'
+import DropDown from './DropDown';
+import { BsThreeDots ,BsCalendar2Plus } from 'react-icons/bs';
+import { AiOutlinePlus,AiOutlineClose } from 'react-icons/ai';
+import { BiSolidEdit } from 'react-icons/bi';
+import tick from '../assets/tick-animation.json';
+import tickStatic from '../assets/tick.svg'
 const Task = (props) => {
 
+    const [cardId,setCardId] = React.useState(null);
+    const [editOpen,setEditOpen] = React.useState(false);
+
+    const handleOpen = (id) =>{
+        setEditOpen(!editOpen)
+        setCardId(id)
+    }
+    const handleClose = () => setEditOpen(false);
+
+    const [justDone,setJustDone] = React.useState(false);
     const Section = (props)=>{
         return(
-            <div className='section'>
-                {props.text}
+            <div onClick={()=>handleOpen(props.id)}  className='section'>
+                <div className='s-text'>{props.text}</div>
+                { props.done &&
+                <div>
+                    
+                <div><img className={`tick-animation ${!justDone ? 'show-tick' : ''} `} src={tickStatic}/></div>
+
+                <div ><Lottie autoPlay={false}
+                 className={`tick-animation ${justDone ? 'show-tick' : ''} `} loop={false} animationData={tick} /></div>
+
+                 </div>
+                }
             </div>
         )
     }
 
-
-    
 
 
     //handle mouseDown
@@ -126,7 +150,7 @@ const Task = (props) => {
   if(props.cards)
   {
     cardElements =  props.cards.map((card,index) =>{
-        return <Section key={index} id={index} text={card}/>
+        return <Section done={card.completed} key={index} id={index} text={card.value}/>
     })
   }
 
@@ -208,6 +232,9 @@ const Task = (props) => {
             </div>
             
         </div>
+            { editOpen && 
+        <EditModal taskId={props.id} cardId={cardId} handleClose={handleClose} isOpen={editOpen} />
+            }
 
     </div>
   )
