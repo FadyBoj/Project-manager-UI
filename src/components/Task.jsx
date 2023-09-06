@@ -233,7 +233,13 @@ const Task = (props) => {
             
         </div>
             { editOpen && 
-        <EditModal taskId={props.id} cardId={cardId} handleClose={handleClose} isOpen={editOpen} />
+        <EditModal 
+        handleTaskChange={props.handleTaskChange}
+        taskId={props.id}
+        cardId={cardId}
+        handleClose={handleClose}
+        isOpen={editOpen}
+        setOpen={setEditOpen} />
             }
 
     </div>

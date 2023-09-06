@@ -4,38 +4,98 @@ import { Box, styled } from '@mui/system';
 import { Modal } from '@mui/base/Modal';
 import Fade from '@mui/material/Fade';
 import { Button } from '@mui/base/Button';
-
+import { toast } from 'sonner'
 //Icons
 import { BsTextParagraph } from 'react-icons/bs'
-
+import { BsFillClipboardCheckFill } from 'react-icons/bs';
 export default function EditModal(props) {
 
 
 
   const editBoxStyle ={
     width:'600px',
-    height:'400px',
+    minHeight:'300px',
     backgroundColor:'#282e33',
     color:'white',
     borderRadius:'14px',
     display:'flex',
-    justifyContent:'center',
-    alignItems:'flex-start',
+    flexDirection:'column',
+    alignItems:'center',
     paddingTop:'20px',
-    outline:'unset'
+    outline:'unset',
+    gap:'30px'
 
   }
 
-   const [cardValue,setCardValue] = React.useState(null);
+   const [cardValue,setCardValue] = React.useState('');
+   const [cardState,setCardState] = React.useState(null);
+   
 
 
-
-      const response =  fetch(`http://localhost:8000/get-single-card/${props.taskId}/${props.cardId}`)
+      React.useEffect(()=>{
+        const response =  fetch(`http://localhost:8000/get-single-card/${props.taskId}/${props.cardId}`)
       .then((res)=>res.json())
-      .then((d)=> setCardValue(d.card.value))
+      .then((d)=> {
+        setCardValue(d.card.value)
+        setCardState(d.card.completed)
+      });
+      },[0])
 
+      
+     const handleChange = (e) =>{
+      setCardValue(e.target.value)
+     }
 
+     // handle save
 
+     const handleSave = async()=>{
+      const data = {value:cardValue,taskId:props.taskId,cardId:props.cardId}
+      const options = {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(data)
+      }
+      try {
+       const response = await fetch('http://localhost:8000/update-card',options);
+       const data = await response.json();
+       if(response.status !== 200)
+       {
+        toast.error(data.msg);
+       }
+       else{
+        props.handleTaskChange()
+        toast.success('Successfully updated your card');
+        props.setOpen(false)
+       }
+      
+      } catch (error) {
+        console.log(error)
+      }
+
+     }
+
+     // handle delete
+     const handleDelete = async()=>{
+      const data = {taskId:props.taskId,cardId:props.cardId}
+      const options = {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(data)
+      }
+
+      try {
+        await fetch('http://localhost:8000/delete-card',options);
+        props.handleTaskChange()
+        toast.success('Successfully Deleted your card');
+        props.setOpen(false)
+      } catch (error) {
+        console.log(error)
+      }
+     }
 
   return (
     <div>
@@ -55,9 +115,23 @@ export default function EditModal(props) {
                 <div>Description</div>
               </div>  
 
-              <div><span className='edit-input' contentEditable={true}>{cardValue}</span></div>
+              <div><textarea value={cardValue} onInput={handleChange} className='edit-input' contentEditable={true}></textarea></div>
             </div>
 
+            <div className='status'>
+              <BsFillClipboardCheckFill size={18} />
+              <div>Status : {cardState ? <span className='card-status'>Done</span>:<span className='card-status'>Not completed</span>}</div>
+
+            </div>
+
+            <div className='card-btn-cont'>
+              <button className='complete-btn'>Set as completed</button>
+            </div>
+
+            <div className='save-delete'>
+              <button onClick={handleDelete}  className='delete-btn'>Delete</button>
+              <button onClick={handleSave} className='save-btn'>Save</button>
+            </div>
 
           </Box>
         </Fade>

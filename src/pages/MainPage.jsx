@@ -18,7 +18,10 @@ import taskAnimation from '../assets/task-lottie.json';
 const MainPage = () => {
 
 
-    const [taskChanged,setTaskChanged] = React.useState(0);  
+    const [taskChanged,setTaskChanged] = React.useState(0); 
+    const handleTaskChange = ()=>{
+      setTaskChanged(prevValue => prevValue + 1);
+    } 
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -128,6 +131,7 @@ const MainPage = () => {
                 cards={task.CARDS}
                 deleteTask={deleteTask}
                 addCard={addCard}
+                handleTaskChange={handleTaskChange}
                   />
               })
             );
